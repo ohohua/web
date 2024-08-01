@@ -1,0 +1,37 @@
+/* nprogress.scss */
+$primary-color: var(--nprogress-color); /* 主色调 */
+
+#nprogress {
+  pointer-events: none; /* 禁用指针事件，以防止进度条影响用户操作 */
+}
+
+#nprogress .bar {
+  background: $primary-color; /* 进度条的背景色 */
+  position: fixed; /* 固定位置 */
+  z-index: 1031; /* 确保进度条在其他元素之上 */
+  top: 0; /* 顶部对齐 */
+  left: 0; /* 左侧对齐 */
+  width: 100%; /* 宽度为100% */
+  height: 3px; /* 高度可以根据需要调整 */
+}
+
+/* 旋转加载图标 */
+#nprogress .spinner {
+  display: block; /* 显示块级元素 */
+  position: fixed; /* 固定位置 */
+  z-index: 1031; /* 确保在其他元素之上 */
+  top: 10px; /* 距顶部10px */
+  left: 50%; /* 水平居中 */
+}
+
+#nprogress .spinner-icon {
+  width: 18px; /* 宽度18px */
+  height: 18px; /* 高度18px */
+  box-sizing: border-box; /* 包括边框在内计算尺寸 */
+
+  border: solid 2px transparent; /* 边框为2px透明 */
+  border-top-color: $primary-color; /* 顶部边框颜色 */
+  border-left-color: $primary-color; /* 左侧边框颜色 */
+  border-radius: 50%; /* 圆角边框 */
+
+}
