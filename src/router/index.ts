@@ -38,21 +38,17 @@ const router = createRouter({
 /* 全局前置守卫 */
 router.beforeEach(async (to) => {
   start() // 开启进度条
-  if (to.meta.requireAuth) {
-    const isLogin = true
-    if (isLogin) {
-      if (to.meta.role === 'admin')
-        if (localStorage.getItem('scope') === 'admin') {
-          return true
-        } else {
-          return { name: 'Forbidden' }
-        }
-      return true
-    } else {
-      return { name: 'login' }
-    }
-  } else {
+  const isLogin = !!localStorage.getItem('token')
+  if (isLogin) {
+    if (to.meta.role === 'admin')
+      if (localStorage.getItem('scope') === 'admin') {
+        return true
+      } else {
+        return { name: 'Forbidden' }
+      }
     return true
+  } else {
+    return { name: 'login' }
   }
 })
 

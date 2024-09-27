@@ -3,9 +3,11 @@ import { useAuthStore } from '@/stores/auth'
 import { View, Hide, Warning } from '@element-plus/icons-vue'
 import theme from '@/components/theme'
 import type { PasswordLogin } from '@/types'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const isPasswordVisible = ref(false) //密码输入框是否可见
+const router = useRouter()
 
 const loginForm = reactive<PasswordLogin>({
   username: '',
@@ -13,7 +15,10 @@ const loginForm = reactive<PasswordLogin>({
   password: '',
 })
 
-const onSubmitWithName = async () => {}
+const onSubmitWithName = async () => {
+  localStorage.setItem('token', 'token')
+  router.replace({ name: 'admin' })
+}
 
 const togglePasswordVisibility = () => {
   isPasswordVisible.value = !isPasswordVisible.value

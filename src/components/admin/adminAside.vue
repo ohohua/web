@@ -5,10 +5,7 @@ import { useCollapseStore } from "@/stores/collapse";
 import { useRouter, useRoute } from "vue-router";
 import { ref, reactive, computed, watch } from "vue";
 import { type MenuItem } from "@/types";
-import { useAuthStore } from "@/stores/auth";
 
-const authStore = useAuthStore();
-const userScope = authStore.getScope();
 const collapseStore = useCollapseStore();
 const router = useRouter();
 const route = useRoute();
@@ -21,37 +18,26 @@ const menuList = reactive<MenuItem[]>([
     title: "首页",
     icon: "House",
     name: "adminHome",
-    scope: ["admin", "user"],
   },
   {
     index: "2",
     title: "系统管理",
     icon: "setting",
     name: "systemManage",
-    scope: ["admin"],
     children: [
       {
         index: "2-1",
         title: "用户管理",
         icon: "User",
         name: "userManage",
-        scope: ["admin"],
       },
       {
         index: "2-2",
         title: "文章管理",
         icon: "Notebook",
         name: "articleManage",
-        scope: ["admin"],
       },
     ],
-  },
-  {
-    index: "4",
-    title: "关于",
-    icon: "InfoFilled",
-    name: "about",
-    scope: ["admin", "user"],
   },
 ]);
 
@@ -62,10 +48,7 @@ const filteredMenuList = computed(() => {
       if (item.children) {
         item.children = filterMenu(item.children);
       }
-      return (
-        item.scope.some((scope) => userScope.includes(scope)) &&
-        (!item.children || item.children.length)
-      );
+      return item && (!item.children || item.children.length);
     });
   }
 
@@ -84,11 +67,11 @@ watch(route, (newRoute) => {
 </script>
 
 <template>
-  <div class="aside-main relative overflow-hidden">
+  <div class="relative overflow-hidden aside-main">
     <!-- 侧边导航菜单 -->
     <el-menu
       :default-active="active"
-      class="aside-menu transition-all duration-300 ease-in-out"
+      class="transition-all duration-300 ease-in-out aside-menu"
       :collapse="collapseStore.isCollapse"
       unique-opened
     >
@@ -128,30 +111,20 @@ watch(route, (newRoute) => {
 
     <!-- 切换侧边栏缩放 -->
     <div
-      class="absolute right-1 bottom-10 w-full flex items-center transition-all duration-600 ease"
+      class="absolute flex items-center w-full transition-all right-1 bottom-10 duration-600 ease"
       :style="{
         justifyContent: collapseStore.isCollapse ? 'center' : 'flex-end',
       }"
     >
-      <el-tooltip
-        content="折叠"
-        placement="bottom"
-        v-if="!collapseStore.isCollapse"
-      >
-        <div
-          class="toggle-button cursor-pointer"
-          @click="collapseStore.toggleCollapse"
-        >
+      <el-tooltip content="折叠" placement="bottom" v-if="!collapseStore.isCollapse">
+        <div class="cursor-pointer toggle-button" @click="collapseStore.toggleCollapse">
           <el-icon size="22px">
             <Fold />
           </el-icon>
         </div>
       </el-tooltip>
       <el-tooltip content="展开" placement="bottom" v-else>
-        <div
-          class="toggle-button cursor-pointer"
-          @click="collapseStore.toggleCollapse"
-        >
+        <div class="cursor-pointer toggle-button" @click="collapseStore.toggleCollapse">
           <el-icon size="22px">
             <Expand />
           </el-icon>
